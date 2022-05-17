@@ -97,6 +97,40 @@ namespace WebApplication2.Controllers
             analytics.WasSold = soldProducts.Count();
             return analytics;
         }
-            
+        [HttpPost]
+        public void CreateBook([FromBody] Product product)
+        {
+            pd.Products.Add(product);
+            pd.SaveChanges();
+        }
+
+        [HttpPut]
+        public void EditBook(int id, [FromBody] Product product)
+        {
+            if (id == product.Id)
+            {
+                pd.Entry(product).State = EntityState.Modified;
+
+                pd.SaveChanges();
+            }
+        }
+
+        public void DeleteBook(int id)
+        {
+            Product product = pd.Products.Find(id);
+            if (product != null)
+            {
+                pd.Products.Remove(product);
+                pd.SaveChanges();
+            }
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                pd.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
