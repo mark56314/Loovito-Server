@@ -9,7 +9,7 @@ namespace WebApplication2.Models.Product
     public class Country
     {
         public int Id { get; set; }
-        [Required]
+        [Required, MaxLength(80)]
         public string Name { get; set; }
     }
 }

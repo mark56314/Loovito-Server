@@ -11,7 +11,8 @@ namespace WebApplication2.Models.Sold
     {
         public int Id { get; set; }
         public Product.Product Product { get; set; }
-        public DateTime Date { get; set; }
+        public int ProductId { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
         [Required]
         public int SoldSum { get; set; }
         public Enums.Status Status { get; set; }

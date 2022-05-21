@@ -9,7 +9,7 @@ namespace WebApplication2.Models.Product
     public class Material
     {
         public int Id { get; set; }
-        [Required]
+        [Required, MaxLength(100)]
         public string Name { get; set; }
     }
 }

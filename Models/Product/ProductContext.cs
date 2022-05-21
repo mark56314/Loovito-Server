@@ -14,7 +14,8 @@ namespace WebApplication2.Models.Product
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Color> Colors { get; set; }
-
+        public DbSet<SizeCL> SizeCLs { get; set; }
+        public DbSet<SizeN> SizeNs { get; set; }
       //   public ProductContext()
       //   {
       //       Database.Delete();

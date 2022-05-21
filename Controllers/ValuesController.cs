@@ -17,9 +17,10 @@ namespace WebApplication2.Controllers
         ProductContext pd = new ProductContext();
         SoldProductContext sold = new SoldProductContext();
         UserContext uc = new UserContext();
+        IncomeContext ic = new IncomeContext();
         public IEnumerable<Product> GetProducts()
         {
-            return pd.Products.Include(M=> M.Material).Include(M=> M.Color).Include(M=> M.Country).Include(M=>M.Brand).Include(M=>M.Season).Include(M=>M.SizeCL).Include(M=>M.SizeN);
+            return pd.Products.Include(M => M.Material).Include(M => M.Color).Include(M => M.Country).Include(M => M.Brand).Include(M => M.Season).Include(M => M.SizeCL).Include(M => M.SizeN).Where(M => M.Status == Enums.Status.Active);
         }
         public IEnumerable<Job> GetJobs(string GetJobs)
         {
@@ -29,6 +30,12 @@ namespace WebApplication2.Controllers
         {
             return uc.Users;
         }
+        public Finance GetFinance(DateTime StartDate, DateTime EndDate)
+        {
+            
+
+        }
+
         public IEnumerable<Brand> GetBrands(string GetBrands)
         {
             return pd.Brands;
@@ -97,24 +104,127 @@ namespace WebApplication2.Controllers
             analytics.WasSold = soldProducts.Count();
             return analytics;
         }
+
+        public IEnumerable<SoldProduct> GetSoldProducts(DateTime Start, DateTime End)
+        {
+            return sold.SoldProducts.Where(M=> M.Date > Start && M.Date < End).Where(M=>M.Status == Enums.Status.Sold);
+        }
         [HttpPost]
         public void CreateBook([FromBody] Product product)
         {
             pd.Products.Add(product);
             pd.SaveChanges();
         }
+        public void SoldProduct([FromBody] SoldProduct product)
+        {
+            Product pro = pd.Products.Find(product.ProductId);
+            product.Product = pro;
+            sold.SoldProducts.Add(product);
+            sold.SaveChanges();
+        }
+        public void CreateCountry([FromBody] Country country)
+        {
+            pd.Countries.Add(country);
+            pd.SaveChanges();
+        }
+        public void CreateColor([FromBody] Color color)
+        {
+            pd.Colors.Add(color);
+            pd.SaveChanges();
+        }
+        public void CreateMaterial([FromBody] Material material)
+        {
+            pd.Materials.Add(material);
+            pd.SaveChanges();
+        }
+        public void CreateSeason([FromBody] Season season)
+        {
+            pd.Seasons.Add(season);
+            pd.SaveChanges();
+        }
+        public void CreateBrand([FromBody] Brand brand)
+        {
+            pd.Brands.Add(brand);
+            pd.SaveChanges();
+        }
+        public void CreateJob([FromBody] Job job)
+        {
+            uc.Jobs.Add(job);
+            uc.SaveChanges();
+        }
 
+        public void CreateUser([FromBody] User user)
+        {
+            uc.Users.Add(user);
+            uc.SaveChanges();
+        }
         [HttpPut]
         public void EditBook(int id, [FromBody] Product product)
         {
             if (id == product.Id)
             {
                 pd.Entry(product).State = EntityState.Modified;
-
                 pd.SaveChanges();
             }
         }
 
+        public void DeleteProduct(int id)
+        {
+            Product product = pd.Products.Find(id);
+            if(product != null)
+            {
+                product.Status = Enums.Status.Deleted;
+                pd.Entry(product).State = EntityState.Modified;
+                pd.SaveChanges();
+            }
+        }
+        public void DeleteColor(string Color)
+        {
+            Color color = pd.Colors.Find(Color);
+            if(color != null)
+            {
+                pd.Colors.Remove(color);
+                pd.SaveChanges();
+            }
+
+        }
+        public void DeleteMaterial(string Material)
+        { 
+            Material material = pd.Materials.Find(Material);
+            if(material != null)
+            {
+                pd.Materials.Remove(material);
+                pd.SaveChanges();
+            }
+        }
+        public void DeleteSeason(string Season)
+        { 
+            Season season = pd.Seasons.Find(Season);
+            if(season != null)
+            {
+                pd.Seasons.Remove(season);
+                pd.SaveChanges();
+            }
+        }
+        public void DeleteBrand(string Brand)
+        { 
+            Brand brand = pd.Brands.Find(Brand);
+            if(brand != null)
+            {
+                pd.Brands.Remove(brand);
+                pd.SaveChanges();
+            }
+        }
+
+        public void DeleteCountry(string Country)
+        { 
+            Country country = pd.Countries.Find(Name);
+            if(country != null)
+            {
+                pd.Countries.Remove(country);
+                pd.SaveChanges();
+            }
+        }
         public void DeleteBook(int id)
         {
             Product product = pd.Products.Find(id);

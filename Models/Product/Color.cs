@@ -9,7 +9,7 @@ namespace WebApplication2.Models.Product
     public class Color
     {
         public int Id { get; set; }
-        [Required]
+        [Required, MaxLength(50)]
         public string Name { get; set; }
     }
 }
